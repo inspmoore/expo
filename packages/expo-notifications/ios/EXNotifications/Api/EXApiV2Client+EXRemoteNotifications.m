@@ -5,17 +5,14 @@
 
 @implementation EXApiV2Client (EXRemoteNotifications)
 
-- (NSURLSessionTask *)updateDeviceToken:(NSData *)deviceToken completionHandler:(void (^)(NSError * _Nullable))handler
+- (NSURLSessionTask *)updateDeviceToken:(NSString *)deviceToken completionHandler:(void (^)(NSError * _Nullable))handler
 {
-  /*NSMutableDictionary *arguments = [NSMutableDictionary dictionaryWithDictionary:@{
-    @"deviceId": [EXKernel deviceInstallUUID],
+  NSMutableDictionary *arguments = [NSMutableDictionary dictionaryWithDictionary:@{
+    @"deviceId": [self deviceInstallUUID],
     @"appId": NSBundle.mainBundle.bundleIdentifier,
-    @"deviceToken": deviceToken.apnsTokenString,
+    @"deviceToken": deviceToken,
     @"type": @"apns",
   }];
-  if ([EXProvisioningProfile mainProvisioningProfile].development) {
-    arguments[@"development"] = @YES;
-  }
   
   return [self callRemoteMethod:@"push/updateDeviceToken"
                       arguments:arguments
@@ -23,25 +20,20 @@
               completionHandler:^(EXApiV2Result * _Nullable response, NSError * _Nullable error) {
                 handler(error);
               }];
-   */
-  return nil; // to remove
 }
 
 
 - (NSURLSessionTask *)getExpoPushTokenForExperience:(NSString *)experienceId
-                                        deviceToken:(NSData *)deviceToken
+                                        deviceToken:(NSString *)deviceToken
                                   completionHandler:(void (^)(NSString * _Nullable, NSError * _Nullable))handler
 {
-  /*NSMutableDictionary *arguments = [NSMutableDictionary dictionaryWithDictionary:@{
-    @"deviceId": [EXKernel deviceInstallUUID],
+  NSMutableDictionary *arguments = [NSMutableDictionary dictionaryWithDictionary:@{
+    @"deviceId": [self deviceInstallUUID],
     @"experienceId": experienceId,
     @"appId": NSBundle.mainBundle.bundleIdentifier,
-    @"deviceToken": deviceToken.apnsTokenString,
+    @"deviceToken": deviceToken,
     @"type": @"apns",
   }];
-  if ([EXProvisioningProfile mainProvisioningProfile].development) {
-    arguments[@"development"] = @YES;
-  }
   
   return [self callRemoteMethod:@"push/getExpoPushToken"
                       arguments:arguments
@@ -66,8 +58,6 @@
                 NSString *expoPushToken = (NSString *)data[@"expoPushToken"];
                 handler(expoPushToken, nil);
               }];
-   */
-  return nil; // to remove
 }
 
 - (NSError *)_errorForMalformedResult:(EXApiV2Result *)result
@@ -78,6 +68,18 @@
                                     NSLocalizedDescriptionKey: @"The server did not send back an Expo push token",
                                     EXApiResultKey: result,
                                     }];
+}
+
+- (NSString *)deviceInstallUUID
+{
+  NSString *uuid_key = @"notifications.expo.device.uuid";
+  NSString *uuid = [[NSUserDefaults standardUserDefaults] stringForKey:uuid_key];
+  if (!uuid) {
+    uuid = [[NSUUID UUID] UUIDString];
+    [[NSUserDefaults standardUserDefaults] setObject:uuid forKey:uuid_key];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+  }
+  return uuid;
 }
 
 @end

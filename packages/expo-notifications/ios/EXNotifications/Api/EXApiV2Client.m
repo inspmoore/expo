@@ -14,6 +14,8 @@ NSString * const EXApiErrorStackKey = @"EXApiHttpStatusCode";
 
 NSString * const EXApiHttpCacheDirectory = @"kernel-www";
 
+NSString * const apiUrl = @"https://exp.host/--/api/v2/";
+
 
 @interface EXApiV2Client ()
 
@@ -78,7 +80,7 @@ NSString * const EXApiHttpCacheDirectory = @"kernel-www";
                                      httpMethod:(NSString *)httpMethod
                               completionHandler:(EXApiV2CompletionHandler)handler
 {
-  /*NSURL *apiEndpoint = [EXBuildConstants sharedInstance].apiServerEndpoint;
+  NSURL *apiEndpoint = [[NSURL alloc] initWithString:apiUrl];
   NSURL *remoteMethodUrl = [NSURL URLWithString:methodPath relativeToURL:apiEndpoint].absoluteURL;
   if (arguments && ![EXApiV2Client _canSendBodyWithHttpMethod:httpMethod]) {
     remoteMethodUrl = [self _urlFromRemoteMethodUrl:remoteMethodUrl withArguments:arguments];
@@ -180,7 +182,7 @@ NSString * const EXApiHttpCacheDirectory = @"kernel-www";
   task.priority = NSURLSessionTaskPriorityHigh;
   [task resume];
   return task;
-   */
+  
   return nil; // to remove
 }
 

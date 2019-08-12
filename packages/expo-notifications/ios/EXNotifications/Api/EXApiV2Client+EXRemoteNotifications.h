@@ -6,10 +6,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EXApiV2Client (EXRemoteNotifications)
 
-- (NSURLSessionTask *)updateDeviceToken:(NSData *)deviceToken
+- (NSURLSessionTask *)updateDeviceToken:(NSString *)deviceToken
                       completionHandler:(void (^)(NSError * _Nullable postError))handler;
 - (NSURLSessionTask *)getExpoPushTokenForExperience:(NSString *)experienceId
-                                        deviceToken:(NSData *)deviceToken
+                                        deviceToken:(NSString *)deviceToken
                                   completionHandler:(void (^)(NSString * _Nullable expoPushToken, NSError * _Nullable error))handler;
 @end
 
