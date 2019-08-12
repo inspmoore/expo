@@ -10,28 +10,29 @@ import expo.modules.notifications.push.TokenDispatcher.engines.Engine;
 class SimpleTokenDispatcher implements TokenDispatcher {
 
   private SharedPreferences sharedPreferences;
-  private Engine engine;
-  private HashMap<String, OnTokenChangeListener> listeners;
+  private Engine mEngine;
+  private HashMap<String, OnTokenChangeListener> listeners = new HashMap<>();
   private Context mContext = null;
 
   SimpleTokenDispatcher(Context context, Engine engine) {
     sharedPreferences = context.getSharedPreferences("expo.host.exp.notifications.token.dispatcher", Context.MODE_PRIVATE);
     mContext = context;
+    mEngine = engine;
   }
 
   @Override
   public void onNewToken(String token, Runnable continuation) {
     String lastToken = sharedPreferences.getString("token", null);
-    if (!lastToken.equals(token)) {
+    if (!(token == null) && !token.equals(lastToken)) {
       SharedPreferences.Editor editor = sharedPreferences.edit();
       editor.putString("token", token);
       editor.commit();
 
-      engine.sendTokenToServer(token, mContext);
+      mEngine.sendTokenToServer(token, mContext);
 
       for (String key : listeners.keySet()) {
         OnTokenChangeListener listener = listeners.get(key);
-        listener.onTokenChange(engine.generateToken(key, token, mContext));
+        listener.onTokenChange(mEngine.generateToken(key, token, mContext));
       }
     }
   }
@@ -41,13 +42,13 @@ class SimpleTokenDispatcher implements TokenDispatcher {
     String currentToken = sharedPreferences.getString("token", null);
     String lastTokenSendToApp = sharedPreferences.getString(appId, null);
 
-    if (!currentToken.equals(lastTokenSendToApp)) {
+    if (!(currentToken == null) && !currentToken.equals(lastTokenSendToApp)) {
       SharedPreferences.Editor editor = sharedPreferences.edit();
-      editor.putString(appId,currentToken);
+      editor.putString(appId, currentToken);
       editor.commit();
+      onTokenChangeListener.onTokenChange(mEngine.generateToken(appId, currentToken, mContext));
     }
 
-    onTokenChangeListener.onTokenChange(engine.generateToken(appId, currentToken, mContext));
     listeners.put(appId, onTokenChangeListener);
   }
 

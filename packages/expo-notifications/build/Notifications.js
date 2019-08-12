@@ -132,6 +132,10 @@ export async function setBadgeNumberAsync(number) {
     }
     return ExponentNotifications.setBadgeNumberAsync(number);
 }
+export async function setOnTokenChangeListener(listener) {
+    _mailbox.setOnTokenChangeListener(listener);
+    await ExponentNotifications.registerForPushNotificationsAsync();
+}
 export function addOnUserInteractionListener(listenerName, listener) {
     _mailbox.addOnUserInteractionListener(listenerName, listener);
 }

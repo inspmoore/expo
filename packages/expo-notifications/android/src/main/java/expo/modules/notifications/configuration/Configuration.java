@@ -2,6 +2,7 @@ package expo.modules.notifications.configuration;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import java.util.HashMap;
@@ -29,7 +30,7 @@ public class Configuration {
 
         String value = null;
         try {
-            ApplicationInfo ai = context.getApplicationInfo();
+            ApplicationInfo ai = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
             Bundle bundle = ai.metaData;
             value = bundle.getString(name);
         } catch (Exception e) {

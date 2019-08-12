@@ -14,12 +14,12 @@ const DeviceEventEmitter = new NativeEventEmitter(ExponentNotifications);
 export class Mailbox {
   private onUserInteractionListeners: Map<string, OnUserInteractionListener>;
   private onForegroundNotificationListeners: Map<string, OnForegroundNotificationListener>;
-  private onTokenChangeListner: OnTokenChangeListener | null;
+  private onTokenChangeListener: OnTokenChangeListener | null;
 
   constructor() {
     this.onUserInteractionListeners = new Map();
     this.onForegroundNotificationListeners = new Map();
-    this.onTokenChangeListeners = null;
+    this.onTokenChangeListener = null;
     DeviceEventEmitter.addListener(
       'Exponent.onUserInteraction',
       this.onUserInteraction.bind(this)
@@ -54,7 +54,7 @@ export class Mailbox {
   }
 
   setOnTokenChangeListener(onTokenChangeListner: OnTokenChangeListener) {
-    this.onTokenChangeListner = onTokenChangeListner;
+    this.onTokenChangeListener = onTokenChangeListner;
   }
 
   private onForegroundNotification(notification: LocalNotification) {
@@ -70,8 +70,8 @@ export class Mailbox {
   }
 
   private onTokenChange(tokenMessage: TokenMessage) {
-    if (this.onTokenChangeListner != null) {
-      this.onTokenChangeListner(tokenMessage.token);
+    if (this.onTokenChangeListener != null) {
+      this.onTokenChangeListener(tokenMessage.token);
     }
   }
 }
