@@ -13,6 +13,7 @@ import {
   UserInteraction,
   OnUserInteractionListener,
   OnForegroundNotificationListener,
+  OnTokenChangeListener,
 } from './Notifications.types';
 
 const _mailbox: Mailbox = new Mailbox();
@@ -168,6 +169,11 @@ export async function setBadgeNumberAsync(number: number): Promise<void> {
     throw new UnavailabilityError('Expo.Notifications', 'setBadgeNumberAsync');
   }
   return ExponentNotifications.setBadgeNumberAsync(number);
+}
+
+export async function setOnTokenChangeListener(listener: OnTokenChangeListener) {
+  _mailbox.setOnTokenChangeListener(listener);
+  await ExponentNotifications.registerForPushNotificationsAsync();
 }
 
 export function addOnUserInteractionListener(

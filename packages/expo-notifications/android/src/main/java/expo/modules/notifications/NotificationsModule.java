@@ -208,6 +208,12 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
   }
 
   @ExpoMethod
+  public void registerForPushNotificationsAsync(final Promise promise) {
+    ThreadSafeTokenDispatcher.getInstance(mContext).registerForTokenChange(mAppId, this);
+    promise.resolve(null);
+  }
+
+  @ExpoMethod
   public void scheduleNotificationWithTimer(HashMap<String, Object> data, final HashMap<String, Object> options, final Promise promise) {
     data = new NotificationScoper(mModuleRegistry.getModule(StringScoper.class)).scope(data);
     data.put(NOTIFICATION_APP_ID_KEY, mAppId);
@@ -280,8 +286,6 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
     mChannelManager = getChannelManager();
 
     PostOfficeProxy.getInstance().registerModuleAndGetPendingDeliveries(mAppId, this);
-
-    ThreadSafeTokenDispatcher.getInstance(mContext).registerForTokenChange(mAppId, this);
   }
 
   private void createDefaultChannel() {

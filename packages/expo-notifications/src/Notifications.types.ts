@@ -52,6 +52,12 @@ export type UserInteraction = LocalNotification & {
     userText?: string;
 }
 
+export type TokenMessage = {
+  token: string;
+}
+
 export type OnUserInteractionListener = (userInteraction: UserInteraction) => void;
 
 export type OnForegroundNotificationListener = (notification: LocalNotification) => void;
+
+export type OnTokenChangeListener = (token: string) => void;

@@ -46,7 +46,6 @@ UM_REGISTER_MODULE();
   
   [[EXThreadSafePostOffice sharedInstance]
    registerModuleAndGetPendingDeliveriesWithAppId:self.appId mailbox:self];
-  [[EXThreadSafeTokenDispatcher sharedInstance] registerForPushTokenWithAppId:_appId onTokenChangeListener:self];
 }
 
 UM_EXPORT_METHOD_AS(presentLocalNotification,
@@ -185,6 +184,14 @@ UM_EXPORT_METHOD_AS(setBadgeNumberAsync,
   dispatch_async(dispatch_get_main_queue(), ^{
     [UIApplication sharedApplication].applicationIconBadgeNumber = number.integerValue;
   });
+  resolve(nil);
+}
+
+UM_EXPORT_METHOD_AS(registerForPushNotificationsAsync,
+                   registerForPushNotificationsAsync:(UMPromiseResolveBlock)resolve
+                                            rejecter:(UMPromiseRejectBlock)reject)
+{
+  [[EXThreadSafeTokenDispatcher sharedInstance] registerForPushTokenWithAppId:_appId onTokenChangeListener:self];
   resolve(nil);
 }
 
@@ -352,7 +359,7 @@ UM_EXPORT_METHOD_AS(deleteCategoryAsync,
 - (void)stopObserving {}
 
 - (void)onTokenChange:(NSString *)token {
-  [_eventEmitter sendEventWithName:@"Exponent.onTokenChange" body:token];
+  [_eventEmitter sendEventWithName:@"Exponent.onTokenChange" body:@{@"token":token}];
 }
 
 @end
