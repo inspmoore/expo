@@ -1,8 +1,8 @@
 // Copyright 2019-present 650 Industries. All rights reserved.
 
-#import "MessageUnscoper.h"
+#import "EXMessageUnscoper.h"
 
-@implementation MessageUnscoper
+@implementation EXMessageUnscoper
 
 + (NSDictionary *) getUnscopedMessage:(NSDictionary *)message  scoper:(id<EXScoper>)scoper
 {

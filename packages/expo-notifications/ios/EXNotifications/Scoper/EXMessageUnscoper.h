@@ -5,7 +5,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MessageUnscoper : NSObject
+@interface EXMessageUnscoper : NSObject
 
 + (NSDictionary *) getUnscopedMessage:(NSDictionary *)message  scoper:(id<EXScoper>)scoper;
 

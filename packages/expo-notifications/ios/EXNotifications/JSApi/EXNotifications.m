@@ -5,7 +5,8 @@
 #import "UMEventEmitterService.h"
 #import <EXNotifications/EXScoper.h>
 #import <EXNotifications/EXAppIdProvider.h>
-#import <EXNotifications/MessageUnscoper.h>
+#import <EXNotifications/EXMessageUnscoper.h>
+#import <EXNotifications/EXThreadSafeTokenDispatcher.h>
 
 @interface EXNotifications ()
 
@@ -42,16 +43,10 @@ UM_REGISTER_MODULE();
   _moduleRegistry = moduleRegistry;
   _appId = [[_moduleRegistry getModuleImplementingProtocol:@protocol(EXAppIdProvider)] getAppId];
   _eventEmitter = [_moduleRegistry getModuleImplementingProtocol:@protocol(UMEventEmitterService)];
+  
   [[EXThreadSafePostOffice sharedInstance]
    registerModuleAndGetPendingDeliveriesWithAppId:self.appId mailbox:self];
-}
-
-UM_EXPORT_METHOD_AS(getPushTokenAsync,
-                    getDevicePushTokenWithConfig: (NSDictionary *)config
-                    resolver:(UMPromiseResolveBlock)resolve
-                    rejecter:(UMPromiseRejectBlock)reject)
-{
-  // TODO
+  [[EXThreadSafeTokenDispatcher sharedInstance] registerForPushTokenWithAppId:_appId onTokenChangeListener:self];
 }
 
 UM_EXPORT_METHOD_AS(presentLocalNotification,
@@ -331,28 +326,33 @@ UM_EXPORT_METHOD_AS(deleteCategoryAsync,
 - (void)dealloc
 {
   [[EXThreadSafePostOffice sharedInstance] unregisterModuleWithAppId:_appId];
+  [[EXThreadSafeTokenDispatcher sharedInstance] unregisterWithAppId:_appId];
 }
 
 - (void)onForegroundNotification:(NSDictionary *)notification
 {
   id<EXScoper> scoper = [_moduleRegistry getModuleImplementingProtocol:@protocol(EXScoper)];
-  notification = [MessageUnscoper getUnscopedMessage:notification scoper:scoper];
+  notification = [EXMessageUnscoper getUnscopedMessage:notification scoper:scoper];
   [_eventEmitter sendEventWithName:@"Exponent.onForegroundNotification" body:notification];
 }
 
 - (void)onUserInteraction:(NSDictionary *)userInteraction
 {
   id<EXScoper> scoper = [_moduleRegistry getModuleImplementingProtocol:@protocol(EXScoper)];
-  userInteraction = [MessageUnscoper getUnscopedMessage:userInteraction scoper:scoper];
+  userInteraction = [EXMessageUnscoper getUnscopedMessage:userInteraction scoper:scoper];
   [_eventEmitter sendEventWithName:@"Exponent.onUserInteraction" body:userInteraction];
 }
 
 - (NSArray<NSString *> *)supportedEvents
 {
-  return @[@"Exponent.onUserInteraction", @"Exponent.onForegroundNotification"];
+  return @[@"Exponent.onUserInteraction", @"Exponent.onForegroundNotification", @"Exponent.onTokenChange"];
 }
 
 - (void)startObserving {}
 - (void)stopObserving {}
+
+- (void)onTokenChange:(NSString *)token {
+  [_eventEmitter sendEventWithName:@"Exponent.onTokenChange" body:token];
+}
 
 @end

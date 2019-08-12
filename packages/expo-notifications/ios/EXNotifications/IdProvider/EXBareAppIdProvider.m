@@ -7,6 +7,10 @@
 UM_REGISTER_MODULE()
 
 - (NSString *)getAppId {
+  NSString *appIdFromInfoPList = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"appId"];
+  if (appIdFromInfoPList != nil) {
+    return appIdFromInfoPList;
+  }
   return @"defaultId";
 }
 
