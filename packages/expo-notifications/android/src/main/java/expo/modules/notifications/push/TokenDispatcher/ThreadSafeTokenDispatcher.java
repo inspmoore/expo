@@ -5,6 +5,7 @@ import android.content.Context;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import expo.modules.notifications.push.PushNotificationEngineProvider;
 import expo.modules.notifications.push.TokenDispatcher.engines.Engine;
 
 public class ThreadSafeTokenDispatcher implements TokenDispatcher {
@@ -17,7 +18,7 @@ public class ThreadSafeTokenDispatcher implements TokenDispatcher {
   private ThreadSafeTokenDispatcher() { }
 
   private ThreadSafeTokenDispatcher(Context context) {
-    Engine engine = null; // TODO;
+    Engine engine = PushNotificationEngineProvider.getPushNotificationEngine(context);
     mNextTokenDispatcher = new SimpleTokenDispatcher(context.getApplicationContext(), engine);
   }
 

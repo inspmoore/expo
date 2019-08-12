@@ -19,7 +19,7 @@ public class Configuration {
     static {
         defaultVaules.put(APP_ID_KEY, "defaultId");
         defaultVaules.put(NOTIFICATION_ACTIVITY_NAME_KEY, null);
-        defaultVaules.put(PUSH_ENGINE_KEY, "none");
+        defaultVaules.put(PUSH_ENGINE_KEY, "bare");
     }
 
     public static String getValueFor(String name, Context context) {

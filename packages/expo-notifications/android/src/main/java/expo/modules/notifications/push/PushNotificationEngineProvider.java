@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import expo.modules.notifications.configuration.Configuration;
-import expo.modules.notifications.push.engines.BareEngine;
-import expo.modules.notifications.push.engines.ExpoEngine;
-import expo.modules.notifications.push.engines.StabEngine;
+import expo.modules.notifications.push.TokenDispatcher.engines.BareEngine;
+import expo.modules.notifications.push.TokenDispatcher.engines.Engine;
+import expo.modules.notifications.push.TokenDispatcher.engines.ExpoEngine;
 
 public class PushNotificationEngineProvider {
 
@@ -22,7 +22,6 @@ public class PushNotificationEngineProvider {
     private static void init() {
         if (engines == null) {
             engines = new HashMap<>();
-            engines.put("none", new StabEngine());
             engines.put("bare", new BareEngine());
             engines.put("expo", new ExpoEngine());
         }

@@ -21,7 +21,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".push.engines.ExpoEngineIntentService"/>
+        <service android:name=".push.fcm.ExpoIntentService"/>
 
         <service
             android:name=".push.fcm.ExpoFcmMessagingService"
