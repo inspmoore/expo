@@ -1,5 +1,6 @@
 package expo.modules.notifications.push.fcm;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -22,7 +23,9 @@ public class ExpoFcmMessagingService extends FirebaseMessagingService {
 
   @Override
   public void onNewToken(String token) {
-    PushNotificationEngineProvider.getPushNotificationEngine(getApplicationContext()).onFirebaseToken(token, this.getApplicationContext());
+    Intent intent = new Intent(getApplicationContext(), ExpoIntentService.class);
+    intent.putExtra("token", token);
+    getApplicationContext().startService(intent);
   }
 
   @Override

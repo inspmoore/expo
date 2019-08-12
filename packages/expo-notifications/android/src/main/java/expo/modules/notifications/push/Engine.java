@@ -4,8 +4,8 @@ import android.content.Context;
 
 public interface Engine {
 
-    void getToken(String appId, Context context, CompletionHandler completionHandler);
+    void generateToken(String appId, Context context, CompletionHandler completionHandler);
 
-    void onFirebaseToken(String token, Context context);
+    void onNewToken(String token, Context context);
 
 }

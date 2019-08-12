@@ -30,8 +30,8 @@ import expo.modules.notifications.channels.ChannelManager;
 import expo.modules.notifications.channels.ChannelPOJO;
 import expo.modules.notifications.channels.ThreadSafeChannelManager;
 import expo.modules.notifications.provider.AppIdProvider;
-import expo.modules.notifications.push.Engine;
-import expo.modules.notifications.push.PushNotificationEngineProvider;
+import expo.modules.notifications.push.TokenDispatcher.OnTokenChangeListener;
+import expo.modules.notifications.push.TokenDispatcher.ThreadSafeTokenDispatcher;
 import expo.modules.notifications.schedulers.IntervalSchedulerModel;
 import expo.modules.notifications.schedulers.SchedulerImpl;
 import expo.modules.notifications.postoffice.Mailbox;
@@ -52,12 +52,13 @@ import static expo.modules.notifications.NotificationConstants.NOTIFICATION_APP_
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_ID_KEY;
 import static expo.modules.notifications.helpers.ExpoCronParser.createCronInstance;
 
-public class NotificationsModule extends ExportedModule implements RegistryLifecycleListener, Mailbox {
+public class NotificationsModule extends ExportedModule implements RegistryLifecycleListener, Mailbox, OnTokenChangeListener {
 
   private static final String TAG = NotificationsModule.class.getSimpleName();
 
   private static final String ON_USER_INTERACTION_EVENT = "Exponent.onUserInteraction";
   private static final String ON_FOREGROUND_NOTIFICATION_EVENT = "Exponent.onForegroundNotification";
+  private static final String ON_TOKEN_CHANGE = "Exponent.onTokenChange";
 
   private Context mContext;
   private String mAppId;
@@ -101,22 +102,6 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
   protected String getProperString(String string) { // scoped version return appIdId+":"+string;
     StringScoper stringScoper = mModuleRegistry.getModule(StringScoper.class);
     return stringScoper.getScopedString(string);
-  }
-
-  @ExpoMethod
-  public void getPushTokenAsync(final Promise promise) {
-    Engine pushNotificationEngine = PushNotificationEngineProvider.getPushNotificationEngine(mContext.getApplicationContext());
-    pushNotificationEngine.getToken(
-            mAppId,
-            mContext.getApplicationContext(),
-            (String token) -> {
-              if (token == null) {
-                promise.reject("TOKEN_ERROR", "Obtaining token wasn't possible");
-              } else {
-                promise.resolve(token);
-              }
-            }
-    );
   }
 
   @ExpoMethod
@@ -295,6 +280,8 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
     mChannelManager = getChannelManager();
 
     PostOfficeProxy.getInstance().registerModuleAndGetPendingDeliveries(mAppId, this);
+
+    ThreadSafeTokenDispatcher.getInstance(mContext).registerForTokenChange(mAppId, this);
   }
 
   private void createDefaultChannel() {
@@ -313,6 +300,7 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
 
   public void onDestory() {
     PostOfficeProxy.getInstance().unregisterModule(mAppId);
+    ThreadSafeTokenDispatcher.getInstance(mContext).unregister(mAppId);
   }
 
   @Override
@@ -333,4 +321,13 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
     }
   }
 
+  @Override
+  public void onTokenChange(String token) {
+    EventEmitter eventEmitter = mModuleRegistry.getModule(EventEmitter.class);
+    if (eventEmitter != null) {
+      Bundle msg = new Bundle();
+      msg.putString("token", token);
+      eventEmitter.emit(ON_TOKEN_CHANGE, msg);
+    }
+  }
 }
