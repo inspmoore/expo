@@ -78,17 +78,6 @@ export function deleteCategoryAsync(categoryId: string): Promise<void> {
   return ExponentNotifications.deleteCategoryAsync(categoryId);
 }
 
-/* Re-export */
-export function getPushTokenAsync(): Promise<string> {
-  if (!ExponentNotifications.getPushTokenAsync) {
-    throw new UnavailabilityError('Expo.Notifications', 'getPushTokenAsync');
-  }
-  if (!Constants.isDevice) {
-    throw new Error(`Must be on a physical device to get an Expo Push Token`);
-  }
-  return ExponentNotifications.getPushTokenAsync();
-}
-
 export function createChannelAsync(id: string, channel: Channel): Promise<void> {
   if (Platform.OS !== 'android') {
     console.warn(`createChannelAndroidAsync(...) has no effect on ${Platform.OS}`);

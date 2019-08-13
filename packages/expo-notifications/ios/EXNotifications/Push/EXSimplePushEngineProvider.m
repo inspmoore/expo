@@ -21,8 +21,8 @@ static NSLock* lock;
       engine = [EXExpoEngine new];
     }
   }
-  return engine;
   [lock unlock];
+  return engine;
 }
 
 @end

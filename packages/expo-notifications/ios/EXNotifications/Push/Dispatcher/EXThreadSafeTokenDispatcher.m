@@ -3,6 +3,10 @@
 #import <EXNotifications/EXThreadSafeTokenDispatcher.h>
 #import <EXNotifications/EXSimpleTokenDispatcher.h>
 
+#import <EXNotifications/EXEngine.h>
+#import <EXNotifications/EXPushEngineProvider.h>
+#import <EXNotifications/EXSimplePushEngineProvider.h>
+
 @interface EXThreadSafeTokenDispatcher ()
 
 @property id<EXTokenDispatcher> insecureTokenDispatcher;
@@ -16,7 +20,8 @@ static dispatch_queue_t queue;
 - (instancetype)init
 {
   if (self = [super init]) {
-    _insecureTokenDispatcher = [EXSimpleTokenDispatcher new];
+    id<EXEngine> engine = [EXSimplePushEngineProvider getEngine];
+    _insecureTokenDispatcher = [[EXSimpleTokenDispatcher alloc] initWithEngine:engine];
   }
   return self;
 }

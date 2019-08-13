@@ -3,6 +3,8 @@
 #ifndef EXPushEngineProvider_h
 #define EXPushEngineProvider_h
 
+#import <EXNotifications/EXEngine.h>
+
 @protocol EXPushEngineProvider <NSObject>
 
 + (id<EXEngine>)getEngine;

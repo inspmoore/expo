@@ -22,6 +22,7 @@
   {
     _defaults = [[NSUserDefaults alloc] initWithSuiteName:@"expo.host.notifications.bare"];
     _listeners = [NSMutableDictionary new];
+    _engine = engine;
   }
   return self;
 }
@@ -34,14 +35,14 @@
                                   stringByReplacingOccurrencesOfString: @" " withString: @""];
   
   NSString *lastToken = [_defaults stringForKey:@"token"];
-  if (![lastToken isEqualToString:tokenStringFormat])
+  if (lastToken == nil || ![lastToken isEqualToString:tokenStringFormat])
   {
     [_defaults setObject:tokenStringFormat forKey:@"token"];
     [_engine sendTokenToServer:tokenStringFormat];
     
     for (NSString *key in [_listeners allKeys]) {
       id<EXOnTokenChangeListener> listener = _listeners[key];
-      [listener onTokenChange:[_engine generateTokenForAppId:tokenStringFormat withToken:key]];
+      [listener onTokenChange:[_engine generateTokenForAppId:key withToken:tokenStringFormat]];
     }
   }
 }
@@ -52,7 +53,7 @@
   
   NSString *token = [_defaults stringForKey:@"token"];
   NSString *lastAppIdToken = [_defaults stringForKey:appId];
-  if (token != lastAppIdToken) {
+  if (token != nil && [token isEqualToString:lastAppIdToken]) {
     [_defaults setObject:token forKey:appId];
     [onTokenChangeListener onTokenChange:[_engine generateTokenForAppId:appId withToken:token]];
   }
@@ -68,10 +69,12 @@
 - (void)maybeRegisterForNotifications
 {
   if ([_listeners count] == 0) {
-    BOOL registered = [[UIApplication sharedApplication] isRegisteredForRemoteNotifications];
-    if (!registered) {
-      [[UIApplication sharedApplication] registerForRemoteNotifications];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+      BOOL registered = [[UIApplication sharedApplication] isRegisteredForRemoteNotifications];
+      if (!registered) {
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+      }
+    });
   }
 }
 

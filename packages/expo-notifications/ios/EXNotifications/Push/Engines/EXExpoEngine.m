@@ -32,7 +32,11 @@
 
 - (void)sendTokenToServer:(NSString *)token
 {
-  [[EXApiV2Client sharedClient] updateDeviceToken:token completionHandler:^(NSError * _Nullable postError) {}];
+  dispatch_semaphore_t sem = dispatch_semaphore_create(0);
+  [[EXApiV2Client sharedClient] updateDeviceToken:token completionHandler:^(NSError * _Nullable postError) {
+    dispatch_semaphore_signal(sem);
+  }];
+  dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
 }
 
 @end

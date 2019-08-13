@@ -2,10 +2,13 @@
 
 #import <Foundation/Foundation.h>
 #import <EXNotifications/EXTokenDispatcher.h>
+#import <EXNotifications/EXEngine.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EXSimpleTokenDispatcher : NSObject <EXTokenDipatcher>
+@interface EXSimpleTokenDispatcher : NSObject <EXTokenDispatcher>
+
+- (instancetype)initWithEngine:(id<EXEngine>)engine;
 
 @end
 

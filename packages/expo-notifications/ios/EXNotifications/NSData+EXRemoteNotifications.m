@@ -8,6 +8,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *)apnsTokenString
 {
+  // if ios-13 change impl
   NSCharacterSet *brackets = [NSCharacterSet characterSetWithCharactersInString:@"<>"];
   return [[[self description] stringByTrimmingCharactersInSet:brackets] stringByReplacingOccurrencesOfString:@" " withString:@""];
 }
