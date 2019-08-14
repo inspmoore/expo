@@ -64,7 +64,7 @@ public class NotificationActionCenter {
     String actionId = actionObject.getActionId();
 
     intent.putExtra(NOTIFICATION_ACTION_TYPE_KEY, actionId);
-    PendingIntent pendingIntent = PendingIntent.getActivity(context, UUID.randomUUID().hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, UUID.randomUUID().hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
     NotificationCompat.Action.Builder actionBuilder = new NotificationCompat.Action.Builder(0,
         actionObject.getButtonTitle(),

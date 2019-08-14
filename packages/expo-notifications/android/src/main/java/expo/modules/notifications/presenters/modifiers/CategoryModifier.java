@@ -1,5 +1,6 @@
 package expo.modules.notifications.presenters.modifiers;
 
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +8,7 @@ import android.support.v4.app.NotificationCompat;
 
 import expo.modules.notifications.action.IntentProvider;
 import expo.modules.notifications.action.NotificationActionCenter;
-import expo.modules.notifications.configuration.Configuration;
+import expo.modules.notifications.userinteractionreceiver.NotificationBroadcastReceiver;
 
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CATEGORY;
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_OBJECT_KEY;
@@ -21,14 +22,7 @@ public class CategoryModifier implements NotificationModifier {
       NotificationActionCenter.setCategory(categoryId, builder, context, new IntentProvider() {
         @Override
         public Intent provide() {
-          String activityName = Configuration.getValueFor(Configuration.NOTIFICATION_ACTIVITY_NAME_KEY, context);
-          Class activityClass = null;
-          try {
-            activityClass = Class.forName(activityName);
-          } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-          }
-          Intent intent = new Intent(context, activityClass);
+          Intent intent = new Intent(context, NotificationBroadcastReceiver.class);
           intent.putExtra(NOTIFICATION_OBJECT_KEY, notification);
           return intent;
         }

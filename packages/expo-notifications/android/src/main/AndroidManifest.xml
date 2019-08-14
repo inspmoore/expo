@@ -21,6 +21,11 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+            android:name=".userinteractionreceiver.NotificationBroadcastReceiver"
+            android:exported="false">
+        </receiver>
+
         <service android:name=".push.fcm.ExpoIntentService"/>
 
         <service
