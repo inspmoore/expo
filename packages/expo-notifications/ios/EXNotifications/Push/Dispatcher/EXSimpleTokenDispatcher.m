@@ -3,6 +3,7 @@
 #import "EXSimpleTokenDispatcher.h"
 #import <EXNotifications/EXOnTokenChangeListener.h>
 #import <EXNotifications/EXEngine.h>
+#import <EXNotifications/NSData+EXRemoteNotifications.h>
 
 @interface EXSimpleTokenDispatcher ()
 
@@ -29,10 +30,7 @@
 
 - (void)onNewToken:(NSData *)token
 {
-  NSString *tokenStringFormat = [[[[token description]
-                                  stringByReplacingOccurrencesOfString: @"<" withString: @""]
-                                  stringByReplacingOccurrencesOfString: @">" withString: @""]
-                                  stringByReplacingOccurrencesOfString: @" " withString: @""];
+  NSString *tokenStringFormat = [token apnsTokenString];
   
   NSString *lastToken = [_defaults stringForKey:@"token"];
   if (lastToken == nil || ![lastToken isEqualToString:tokenStringFormat])

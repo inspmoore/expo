@@ -59,4 +59,11 @@ static dispatch_queue_t queue;
   });
 }
 
+- (void)doWeHaveMailboxRegisteredAsAppId:(NSString*)appId completionHandler:(void (^)(BOOL))completionHandler
+{
+  dispatch_async(queue, ^{
+    [self.insecurePostOffice doWeHaveMailboxRegisteredAsAppId:appId completionHandler:completionHandler];
+  });
+}
+
 @end

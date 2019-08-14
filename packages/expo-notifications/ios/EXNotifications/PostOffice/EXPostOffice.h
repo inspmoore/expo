@@ -15,6 +15,8 @@
 
 - (void)unregisterModuleWithAppId:(NSString*)appId;
 
+- (void)doWeHaveMailboxRegisteredAsAppId:(NSString*)appId completionHandler:(void (^)(BOOL))completionHandler;
+
 @end
 
 #endif /* EXPostOffice_h */

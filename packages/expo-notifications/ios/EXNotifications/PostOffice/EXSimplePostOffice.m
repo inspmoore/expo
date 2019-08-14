@@ -50,6 +50,7 @@
 - (void)registerModuleAndGetPendingDeliveriesWithAppId:(NSString*)appId
                                                       mailbox:(id<EXMailbox>)mailbox
 {
+  NSLog(@"REGISTER");
   self.mailboxes[appId] = mailbox;
   
   NSArray<NSDictionary*> *pendingForegroundNotifications = [self.notificationRepository getForegroundNotificationsForAppId:appId];
@@ -67,7 +68,14 @@
 
 - (void)unregisterModuleWithAppId:(NSString*)appId
 {
+  NSLog(@"UN REGISTER");
   [self.mailboxes removeObjectForKey:appId];
+}
+
+- (void)doWeHaveMailboxRegisteredAsAppId:(NSString*)appId completionHandler:(void (^)(BOOL))completionHandler
+{
+  id<EXMailbox> mailbox = [self.mailboxes objectForKey:appId];
+  completionHandler(mailbox == nil);
 }
 
 @end

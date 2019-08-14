@@ -7,6 +7,7 @@
 #import <EXNotifications/EXAppIdProvider.h>
 #import <EXNotifications/EXMessageUnscoper.h>
 #import <EXNotifications/EXThreadSafeTokenDispatcher.h>
+#import <EXNotifications/EXNotificationConverter.h>
 
 @interface EXNotifications ()
 
@@ -252,32 +253,14 @@ UM_EXPORT_METHOD_AS(deleteCategoryAsync,
 
 - (UNMutableNotificationContent *)_localNotificationFromPayload:(NSDictionary *)payload
 {
-  UNMutableNotificationContent *content = [UNMutableNotificationContent new];
+  NSMutableDictionary *mutablePayload = [payload mutableCopy];
+  [mutablePayload setObject:self.appId forKey:@"appId"];
   
-  NSString *uniqueId = [[NSUUID new] UUIDString];
-  
-  content.title = payload[@"title"];
-  content.body = payload[@"body"];
-  
-  if ([payload[@"sound"] boolValue]) {
-    content.sound = [UNNotificationSound defaultSound];
+  if (mutablePayload[@"categoryId"]) {
+    mutablePayload[@"categoryId"] = [self internalIdForIdentifier:mutablePayload[@"categoryId"]];
   }
   
-  if ([payload[@"count"] isKindOfClass:[NSNumber class]]) {
-    content.badge = (NSNumber *)payload[@"count"];
-  }
-  
-  if ([payload[@"categoryId"] isKindOfClass:[NSString class]]) {
-    content.categoryIdentifier = [self internalIdForIdentifier:payload[@"categoryId"]];
-  }
-  
-  content.userInfo = @{
-                       @"body": payload[@"data"],
-                       @"appId": self.appId,
-                       @"id": uniqueId,
-                       };
-  
-  return content;
+  return [EXNotificationConverter convertToNotificationContent:mutablePayload];
 }
 
 - (NSString *)internalIdForIdentifier:(NSString *)identifier {

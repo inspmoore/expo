@@ -2,7 +2,8 @@
 
 #import "EXUserNotificationManager.h"
 #import "EXRemoteNotificationManager.h"
-#import "EXPostOffice.h"
+#import <EXNotifications/EXPostOffice.h>
+#import <EXNotifications/EXNotificationConverter.h>
 
 @implementation EXUserNotificationManager
 
@@ -29,26 +30,32 @@
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
 {
-
-  NSDictionary *userInfo = notification.request.content.userInfo;
+  __block NSDictionary *userInfo = notification.request.content.userInfo;
+  __block NSString *appId = userInfo[@"appId"];
+  __block NSMutableDictionary *notificationBundle = [EXNotificationConverter convertToDictionary:notification.request.content];
   
-  BOOL shouldDisplayInForeground = NO || userInfo[@"canInForeground"];
-
-  if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive || shouldDisplayInForeground) {
-    completionHandler(
-                      UNNotificationPresentationOptionAlert +
-                      UNNotificationPresentationOptionSound +
-                      UNNotificationPresentationOptionBadge // TODO: let user decide
-                      );
-    return;
-  }
-
-  EXPendingNotification *pendingNotification = [[EXPendingNotification alloc] initWithNotification:notification];
+  __block BOOL shouldDisplayInForeground = NO || userInfo[@"canInForeground"];
   
-  NSString *appId = userInfo[@"appId"];
-  [[EXThreadSafePostOffice sharedInstance] notifyAboutForegroundNotificationForAppId:appId notification:[pendingNotification propertiesForegroundNotificationFormat]];
-
-  completionHandler(UNNotificationPresentationOptionNone);
+  [[EXThreadSafePostOffice sharedInstance] doWeHaveMailboxRegisteredAsAppId:appId completionHandler:^void (BOOL isJSActive) {
+    if (isJSActive || shouldDisplayInForeground) {
+      NSUInteger notificationPresentationOptions = UNNotificationPresentationOptionAlert;
+      
+      if (notificationBundle[@"count"]) {
+        notificationPresentationOptions += UNNotificationPresentationOptionBadge;
+      }
+      
+      if (notificationBundle[@"sound"]) {
+        notificationPresentationOptions += UNNotificationPresentationOptionSound;
+      }
+      
+      completionHandler(notificationPresentationOptions);
+      return;
+    }
+    
+    [[EXThreadSafePostOffice sharedInstance] notifyAboutForegroundNotificationForAppId:appId notification:notificationBundle];
+    
+    completionHandler(UNNotificationPresentationOptionNone);
+  }];
 }
 
 @end
