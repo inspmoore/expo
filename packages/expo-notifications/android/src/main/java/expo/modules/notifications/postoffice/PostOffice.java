@@ -5,6 +5,8 @@ import android.os.Bundle;
 import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
+import org.unimodules.core.interfaces.Function;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,6 +83,10 @@ class PostOffice implements ExpoPostOffice {
     pendingForegroundNotification.setappId(appId);
     pendingForegroundNotification.setNotification(Utils.bundleToString(notification));
     pendingForegroundNotification.save();
+  }
+
+  public void doWeHaveMailboxRegisteredAsAppId(String appId, Function<Boolean, Boolean> completionHandler) {
+    completionHandler.apply(mMailBoxes.containsKey(appId));
   }
 
 }

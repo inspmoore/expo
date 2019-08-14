@@ -2,6 +2,8 @@ package expo.modules.notifications.postoffice;
 
 import android.os.Bundle;
 
+import org.unimodules.core.interfaces.Function;
+
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -42,5 +44,9 @@ public class PostOfficeProxy implements ExpoPostOffice {
   @Override
   public void unregisterModule(final String appId) {
     mSingleThreadExecutor.execute(() -> mPostOffice.unregisterModule(appId));
+  }
+
+  public void doWeHaveMailboxRegisteredAsAppId(String appId, Function<Boolean, Boolean> completionHandler) {
+    mSingleThreadExecutor.execute(() -> mPostOffice.doWeHaveMailboxRegisteredAsAppId(appId, completionHandler));
   }
 }

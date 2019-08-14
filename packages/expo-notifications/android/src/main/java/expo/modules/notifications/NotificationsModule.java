@@ -302,7 +302,8 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
     return ThreadSafeChannelManager.getInstance();
   }
 
-  public void onDestory() {
+  @Override
+  public void onDestroy() {
     PostOfficeProxy.getInstance().unregisterModule(mAppId);
     ThreadSafeTokenDispatcher.getInstance(mContext).unregister(mAppId);
   }

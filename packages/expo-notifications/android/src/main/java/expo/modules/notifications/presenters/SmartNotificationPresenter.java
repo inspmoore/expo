@@ -15,17 +15,14 @@ public class SmartNotificationPresenter implements NotificationPresenter {
 
   @Override
   public void presentNotification(Context context, String appId, Bundle notification, int notificationId) {
-    if (isInForegroundState()) {
-      PostOfficeProxy.getInstance().sendForegroundNotification(appId, notification);
-    } else {
-      mNotificationPresenter.presentNotification(context, appId, notification, notificationId);
-    }
-  }
-
-  private boolean isInForegroundState() {
-      ActivityManager.RunningAppProcessInfo appProcessInfo = new ActivityManager.RunningAppProcessInfo();
-      ActivityManager.getMyMemoryState(appProcessInfo);
-      return (appProcessInfo.importance == IMPORTANCE_FOREGROUND || appProcessInfo.importance == IMPORTANCE_VISIBLE); // check
+    PostOfficeProxy.getInstance().doWeHaveMailboxRegisteredAsAppId(appId, (x) -> {
+      if (x) {
+        PostOfficeProxy.getInstance().sendForegroundNotification(appId, notification);
+      } else {
+        mNotificationPresenter.presentNotification(context, appId, notification, notificationId);
+      }
+      return null;
+    });
   }
 
 }
