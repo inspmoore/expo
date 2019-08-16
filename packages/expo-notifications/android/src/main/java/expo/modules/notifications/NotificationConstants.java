@@ -30,11 +30,6 @@ public class NotificationConstants {
   public static final String NOTIFICATION_CHANNEL_BADGE = "badge";
   public static final String NOTIFICATION_CHANNEL_GROUP_ID = "groupId";
 
-  public static final String NOTIFICATION_CHANNEL_PRIORITY_MAX = "max";
-  public static final String NOTIFICATION_CHANNEL_PRIORITY_HIGH = "high";
-  public static final String NOTIFICATION_CHANNEL_PRIORITY_LOW = "low";
-  public static final String NOTIFICATION_CHANNEL_PRIORITY_MIN = "min";
-
   public static final String NOTIFICATION_BODY = "body";
   public static final String NOTIFICATION_SOUND = "sound";
   public static final String NOTIFICATION_STICKY = "sticky";

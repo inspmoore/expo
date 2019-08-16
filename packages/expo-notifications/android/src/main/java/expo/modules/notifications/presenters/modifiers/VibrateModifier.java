@@ -11,6 +11,7 @@ public class VibrateModifier implements  NotificationModifier {
   public void modify(NotificationCompat.Builder builder, Bundle notification, Context context, String appId) {
     if (notification.containsKey(NOTIFICATION_VIBRATE) && notification.getLongArray(NOTIFICATION_VIBRATE) != null) {
       builder.setVibrate(notification.getLongArray(NOTIFICATION_VIBRATE));
+      notification.remove(NOTIFICATION_VIBRATE); // we cannot send array of longs to js by event emitter :(
     }
   }
 }

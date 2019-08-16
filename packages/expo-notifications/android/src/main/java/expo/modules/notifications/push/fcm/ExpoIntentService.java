@@ -24,7 +24,6 @@ public class ExpoIntentService extends IntentService {
         semaphore.release();
       });
       semaphore.acquire();
-      System.out.println("sdfsfs");
     } catch (InterruptedException e) {
       e.printStackTrace();
     }

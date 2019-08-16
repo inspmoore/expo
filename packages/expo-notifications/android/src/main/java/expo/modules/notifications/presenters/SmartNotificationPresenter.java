@@ -1,13 +1,9 @@
 package expo.modules.notifications.presenters;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Bundle;
 
 import expo.modules.notifications.postoffice.PostOfficeProxy;
-
-import static android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
-import static android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE;
 
 public class SmartNotificationPresenter implements NotificationPresenter {
 

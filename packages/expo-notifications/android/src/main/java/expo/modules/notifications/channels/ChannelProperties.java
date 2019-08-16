@@ -34,7 +34,8 @@ public class ChannelProperties extends BaseModel {
       ObjectOutputStream so = new ObjectOutputStream(bo);
       so.writeObject(channelPOJO);
       so.flush();
-      serializedChannel = bo.toString();
+      serializedChannel = bo.toString("ISO-8859-1");
+      so.close();
     } catch (Exception e) {
       System.out.println(e);
     }
@@ -42,10 +43,11 @@ public class ChannelProperties extends BaseModel {
 
   public ChannelPOJO toChannelPOJO() {
     try {
-      byte b[] = serializedChannel.getBytes();
+      byte b[] = serializedChannel.getBytes("ISO-8859-1");
       ByteArrayInputStream bi = new ByteArrayInputStream(b);
       ObjectInputStream si = new ObjectInputStream(bi);
       ChannelPOJO channelPOJO = (ChannelPOJO) si.readObject();
+      si.close();
       return channelPOJO;
     } catch (Exception e) {
       System.out.println(e);

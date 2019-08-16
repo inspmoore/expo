@@ -335,4 +335,5 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
       eventEmitter.emit(ON_TOKEN_CHANGE, msg);
     }
   }
+
 }

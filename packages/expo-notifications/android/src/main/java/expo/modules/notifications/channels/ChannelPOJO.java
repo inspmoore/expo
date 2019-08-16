@@ -37,7 +37,7 @@ public class ChannelPOJO implements Serializable {
     Builder builder = new ChannelPOJO.Builder();
 
     if (map.containsKey(NOTIFICATION_CHANNEL_PRIORITY)) {
-      builder.setImportance((Integer) map.get(NOTIFICATION_CHANNEL_PRIORITY));
+      builder.setImportance(((Number) map.get(NOTIFICATION_CHANNEL_PRIORITY)).intValue());
     } else {
       builder.setImportance(0);
     }
@@ -71,7 +71,7 @@ public class ChannelPOJO implements Serializable {
 
       long [] array = new long[arrayList.size()];
       for (int i = 0; i < arrayList.size(); ++i) {
-        array[i] = (Long) arrayList.get(i);
+        array[i] = ((Number) arrayList.get(i)).longValue();
       }
 
       builder.setVibrate(array);
