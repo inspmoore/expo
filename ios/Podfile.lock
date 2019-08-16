@@ -830,6 +830,8 @@ PODS:
   - EXDocumentPicker (6.0.0):
     - UMCore
     - UMFileSystemInterface
+  - EXErrorRecovery (1.0.0):
+    - UMCore
   - EXFacebook (6.0.0):
     - FBSDKCoreKit (~> 4.0)
     - FBSDKLoginKit (~> 4.0)
@@ -1566,6 +1568,7 @@ DEPENDENCIES:
   - EXCrypto (from `../packages/expo-crypto/ios`)
   - EXDevice (from `../packages/expo-device/ios`)
   - EXDocumentPicker (from `../packages/expo-document-picker/ios`)
+  - EXErrorRecovery (from `../packages/expo-error-recovery/ios`)
   - EXFacebook (from `../packages/expo-facebook/ios`)
   - EXFaceDetector (from `../packages/expo-face-detector/ios`)
   - EXFileSystem (from `../packages/expo-file-system/ios`)
@@ -2160,6 +2163,9 @@ EXTERNAL SOURCES:
   EXDocumentPicker:
     :path: !ruby/object:Pathname
     path: "../packages/expo-document-picker/ios"
+  EXErrorRecovery:
+    :path: !ruby/object:Pathname
+    path: "../packages/expo-error-recovery/ios"
   EXFacebook:
     :path: !ruby/object:Pathname
     path: "../packages/expo-facebook/ios"
@@ -2528,6 +2534,7 @@ SPEC CHECKSUMS:
   EXCrypto: 0b51b301dc3748114a18752d2533e4167bad1730
   EXDevice: d08fdca5e11432c4389f04a3ecec51d31f1c160d
   EXDocumentPicker: 043c0521b52ae061070fd84b405459e0b7cba940
+  EXErrorRecovery: e4a85cd3a79152faa663183aefffdc23b234b797
   EXFacebook: b71969e92a4d76632ee743d26e88c61b4d9a3e45
   EXFaceDetector: badb48d40de77184aabcc8bc9cbd9b2e6d5e14ee
   EXFileSystem: 091907902fcec9f9182b656fdead41a82f30986a
@@ -2609,6 +2616,6 @@ SPEC CHECKSUMS:
   yogaABI33_0_0: aec4e4cfccfd36f11487aa0f2c678fe58ebf77bc
   yogaABI34_0_0: d6b988f267753a1d944343fd03668f0d194ec4bf
 
-PODFILE CHECKSUM: 9a5974b3440a63c3a02566809aeeb4b9c4c439cf
+PODFILE CHECKSUM: 8ed622845e211eaa58c567d513f602dd6ff9a28c
 
 COCOAPODS: 1.7.3
