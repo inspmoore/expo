@@ -6,11 +6,11 @@
     <application>
         <!-- expo-notifications BEGIN -->
         <receiver
-            android:name=".insecurescheduler.ScheduledNotificationReceiver"
+            android:name=".scheduling.insecurescheduler.ScheduledNotificationReceiver"
             android:exported="false"/>
 
         <receiver
-            android:name=".receivers.SchedulingTriggerReceiver"
+            android:name=".scheduling.receivers.SchedulingTriggerReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.REBOOT"/>

@@ -15,12 +15,12 @@ public class Configuration {
 
     static HashMap<String, String> configuration = new HashMap<>();
 
-    static HashMap<String, String> defaultVaules = new HashMap<>();
+    static HashMap<String, String> defaultValues = new HashMap<>();
 
     static {
-        defaultVaules.put(APP_ID_KEY, "defaultId");
-        defaultVaules.put(NOTIFICATION_ACTIVITY_NAME_KEY, null);
-        defaultVaules.put(PUSH_ENGINE_KEY, "bare");
+        defaultValues.put(APP_ID_KEY, "defaultId");
+        defaultValues.put(NOTIFICATION_ACTIVITY_NAME_KEY, null);
+        defaultValues.put(PUSH_ENGINE_KEY, "bare");
     }
 
     public static String getValueFor(String name, Context context) {
@@ -37,7 +37,7 @@ public class Configuration {
 
         }
         if (value == null) {
-            configuration.put(name, defaultVaules.get(name));
+            configuration.put(name, defaultValues.get(name));
         } else {
             configuration.put(name, value);
         }

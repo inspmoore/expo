@@ -11,8 +11,8 @@ import org.unimodules.core.ExportedModule;
 import org.unimodules.core.ViewManager;
 import org.unimodules.core.interfaces.InternalModule;
 
-import expo.modules.notifications.provider.BareAppIdProvider;
-import expo.modules.notifications.scoper.BareStringScoper;
+import expo.modules.notifications.helpers.provider.BareAppIdProvider;
+import expo.modules.notifications.helpers.scoper.BareStringScoper;
 
 public class NotificationsPackage extends BasePackage {
   @Override

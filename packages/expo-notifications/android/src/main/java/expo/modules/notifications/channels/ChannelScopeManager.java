@@ -4,7 +4,7 @@ import android.content.Context;
 
 import java.util.concurrent.Future;
 
-import expo.modules.notifications.scoper.StringScoper;
+import expo.modules.notifications.helpers.scoper.StringScoper;
 
 public class ChannelScopeManager implements ChannelManager {
 
