@@ -17,8 +17,8 @@ public class AndroidAwareChannelManager  implements ChannelManager {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       NotificationChannel newChannel = new NotificationChannel(channelId, channel.getChannelName(), channel.getImportance());
 
-      if (channel.getChannelId() != null) {
-        newChannel.setGroup(channel.getChannelId());
+      if (channel.getGroupId() != null) {
+        newChannel.setGroup(channel.getGroupId());
       }
 
       if (channel.getDescription() != null) {

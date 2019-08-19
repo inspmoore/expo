@@ -1,7 +1,6 @@
 // Copyright 2015-present 650 Industries. All rights reserved.
 
 #import "EXUserNotificationManager.h"
-#import "EXRemoteNotificationManager.h"
 #import <EXNotifications/EXPostOffice.h>
 #import <EXNotifications/EXNotificationConverter.h>
 

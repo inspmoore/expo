@@ -6,7 +6,6 @@ buildscript {
 
   dependencies {
     classpath 'com.android.tools.build:gradle:3.2.1'
-    classpath 'com.google.gms:google-services:4.3.0'
   }
 }
 
@@ -58,8 +57,6 @@ android {
         targetCompatibility = '1.8'
     }
 }
-
-apply plugin: 'com.google.gms.google-services'
 
 if (new File(rootProject.projectDir.parentFile, 'package.json').exists()) {
   apply from: project(":unimodules-core").file("../unimodules-core.gradle")
