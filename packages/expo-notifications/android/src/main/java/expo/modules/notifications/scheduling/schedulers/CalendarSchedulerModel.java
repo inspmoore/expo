@@ -133,11 +133,7 @@ public class CalendarSchedulerModel extends BaseModel implements SchedulerModel 
   }
 
   public void setSerializedDetails(String serializedDetails) {
-    try {
-      details = HashMapSerializer.deserialize(serializedDetails);
-    } catch (JSONException e) {
-      e.printStackTrace();
-    }
+    details = HashMapSerializer.deserialize(serializedDetails);
     this.serializedDetails = serializedDetails;
   }
 

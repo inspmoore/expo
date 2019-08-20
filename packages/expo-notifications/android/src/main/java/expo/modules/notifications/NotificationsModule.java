@@ -28,6 +28,7 @@ import java.util.Random;
 import expo.modules.notifications.action.NotificationActionCenter;
 import expo.modules.notifications.channels.ChannelManager;
 import expo.modules.notifications.channels.ChannelPOJO;
+import expo.modules.notifications.channels.ChannelScopeManager;
 import expo.modules.notifications.channels.ThreadSafeChannelManager;
 import expo.modules.notifications.helpers.provider.AppIdProvider;
 import expo.modules.notifications.push.TokenDispatcher.OnTokenChangeListener;
@@ -299,7 +300,7 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
   }
 
   protected ChannelManager getChannelManager() {
-    return ThreadSafeChannelManager.getInstance();
+    return new ChannelScopeManager(mModuleRegistry.getModule(StringScoper.class));
   }
 
   @Override

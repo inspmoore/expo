@@ -20,7 +20,12 @@ public class Utils {
   public static Bundle convertMapToBundle(Map<String, Object> map) {
     Bundle bundle = new Bundle();
     for (String key : map.keySet()) {
+
       Object value = map.get(key);
+      if (value == null) {
+        continue;
+      }
+
       if (value instanceof String) {
         bundle.putString(key, (String) value);
       } else if (value instanceof Integer) {
@@ -60,13 +65,8 @@ public class Utils {
   }
 
   public static Bundle StringToBundle(String string) {
-    try {
-      HashMap<String, Object> map = HashMapSerializer.deserialize(string);
-      return convertMapToBundle(map);
-    } catch (JSONException e) {
-      e.printStackTrace();
-    }
-    return null;
+    HashMap<String, Object> map = HashMapSerializer.deserialize(string);
+    return convertMapToBundle(map);
   }
 
 }

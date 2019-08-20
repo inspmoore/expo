@@ -1,9 +1,13 @@
 package expo.modules.notifications.helpers;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,62 +16,31 @@ import java.util.List;
 public class HashMapSerializer {
 
   public static String serialize(HashMap<String, Object> map) {
-    JSONObject serialized = new JSONObject(map);
-    return serialized.toString();
-  }
-
-  public static HashMap<String, Object> deserialize(String serializedMap) throws JSONException {
-    JSONObject serialized = null;
     try {
-      serialized = new JSONObject(serializedMap);
-    } catch (JSONException e) {
+      ByteArrayOutputStream bo = new ByteArrayOutputStream();
+      ObjectOutputStream so = new ObjectOutputStream(bo);
+      so.writeObject(map);
+      so.flush();
+      String serialized = bo.toString("ISO-8859-1");
+      return  serialized;
+    } catch (IOException e) {
       e.printStackTrace();
     }
-    return jsonToMap(serialized);
+
+    return null;
   }
 
-  public static HashMap<String, Object> jsonToMap(JSONObject json) throws JSONException {
-    HashMap<String, Object> retMap = new HashMap<String, Object>();
-
-    if (json != JSONObject.NULL) {
-      retMap = toMap(json);
+  public static HashMap<String, Object> deserialize(String serializedMap) {
+    JSONObject serialized = null;
+    try {
+      byte b[] = serializedMap.getBytes("ISO-8859-1");
+      ByteArrayInputStream bi = new ByteArrayInputStream(b);
+      ObjectInputStream si = new ObjectInputStream(bi);
+      HashMap<String, Object> map = (HashMap<String, Object>) si.readObject();
+      return map;
+    } catch (IOException | ClassNotFoundException e) {
+      e.printStackTrace();
     }
-    return retMap;
-  }
-
-  public static HashMap<String, Object> toMap(JSONObject object) throws JSONException {
-    HashMap<String, Object> map = new HashMap<String, Object>();
-
-    Iterator<String> keysItr = object.keys();
-    while (keysItr.hasNext()) {
-      String key = keysItr.next();
-      Object value = object.get(key);
-
-      if (value instanceof JSONArray) {
-        value = toList((JSONArray) value);
-      }
-
-      else if (value instanceof JSONObject) {
-        value = toMap((JSONObject) value);
-      }
-      map.put(key, value);
-    }
-    return map;
-  }
-
-  public static List<Object> toList(JSONArray array) throws JSONException {
-    List<Object> list = new ArrayList<Object>();
-    for (int i = 0; i < array.length(); i++) {
-      Object value = array.get(i);
-      if (value instanceof JSONArray) {
-        value = toList((JSONArray) value);
-      }
-
-      else if (value instanceof JSONObject) {
-        value = toMap((JSONObject) value);
-      }
-      list.add(value);
-    }
-    return list;
+    return null;
   }
 }
